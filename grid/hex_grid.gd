@@ -12,9 +12,8 @@ func _draw():
 			draw_line(child.pointy_hex_corner(size, i - 1), child.pointy_hex_corner(size, i), Color.RED)
 		draw_line(child.pointy_hex_corner(size, 5), child.pointy_hex_corner(size, 0), Color.RED)
 			
-		for vertex in child.vertices:
-			if vertex:
-				draw_circle(vertex.position, 10.0, Color.BLUE)
+	for child in get_child(1).get_children():
+		draw_circle(child.position, 10.0, Color.BLUE)
 
 func build(n_circle_: int) -> void:
 	n_circle = n_circle_
@@ -24,6 +23,11 @@ func build(n_circle_: int) -> void:
 	
 	create_cells()
 	create_vertices()
+	
+	for child in get_child(0).get_children():
+		var lable = Label.new()
+		lable.text = str(child.r) + ", " + str(child.q)
+		child.add_child(lable)
 
 func create_cells() -> void:
 	add_child(Node2D.new())
@@ -53,13 +57,11 @@ func create_vertices() -> void:
 				var cell = get_cell(q, r)
 				
 				for i in range(6):
-					var cell_n = get_neighbour(q, r, indx(i - 1))
-					var cell_np = get_neighbour(q, r, indx(i))
+					var cell_n = get_neighbour(q, r, indx(i))
+					var cell_np = get_neighbour(q, r, indx(i + 1))
 					
-					if (cell_n == null) and (cell_np == null):
-						print(i)
-						var vertex = HexVertex.new()	
-						vertex.position = cell.pointy_hex_corner(size, i)
+					if (cell_n == null) and (cell_np == null) and (cell.vertices[i] == null):
+						var vertex = HexVertex.new(cell.pointy_hex_corner(size, i))
 						cell.vertices[i] = vertex
 						get_child(1).add_child(vertex)
 						vertex.owner = self

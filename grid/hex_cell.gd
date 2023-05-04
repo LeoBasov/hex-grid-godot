@@ -8,8 +8,8 @@ func _init(q_: int, r_: int, size: float):
 	q = q_
 	r = r_
 
-	position.x += sqrt(3) * size * r + 0.5 * sqrt(3) * size * q
-	position.y -= (3.0/2.0) * size * q
+	position.x += sqrt(3) * size * q + 0.5 * sqrt(3) * size * r
+	position.y += (3.0/2.0) * size * r
 	
 	vertices.resize(6)
 	
@@ -17,6 +17,5 @@ func _init(q_: int, r_: int, size: float):
 		vertices[i] = null
 
 func pointy_hex_corner(size, i):
-	var angle_deg = -60 * i - 30
-	var angle_rad = PI / 180 * angle_deg
-	return Vector2(position.x + size * cos(angle_rad), position.y + size * sin(angle_rad))
+	var angle_rad = PI/3 * i + PI/6
+	return Vector2(position.x + size * cos(angle_rad), position.y - size * sin(angle_rad))
