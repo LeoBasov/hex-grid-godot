@@ -14,6 +14,9 @@ func _draw():
 			
 	for child in get_child(1).get_children():
 		draw_circle(child.position, 10.0, Color.BLUE)
+		
+	for child in get_child(2).get_children():
+		draw_line(child.vertices[0].position, child.vertices[1].position, Color.BLUE_VIOLET, 10)
 
 func build(n_circle_: int) -> void:
 	n_circle = n_circle_
@@ -23,6 +26,7 @@ func build(n_circle_: int) -> void:
 	
 	create_cells()
 	create_vertices()
+	create_sides()
 	
 	for child in get_child(0).get_children():
 		var lable = Label.new()
@@ -114,3 +118,26 @@ func get_neighbour(q, r, i):
 	var dr: Array = [0, -1, -1, -0,  1, 1]
 	
 	return get_cell(q + dq[i], r + dr[i])
+
+func create_sides() -> void:
+	add_child(Node2D.new())
+	
+	for cell in get_child(0).get_children():
+		for i in range(6):
+			var cell_np = get_neighbour(cell.q, cell.r, indx(i + 1))
+			
+			if (cell.sides[i] == null) and (cell_np == null):
+				var side = HexSide.new(i, cell)
+				cell.sides[i] = side
+				get_child(2).add_child(side)
+				side.owner = self
+			elif (cell.sides[i] == null) and (cell_np.sides[indx(i + 1)] == null):
+				var side = HexSide.new(i, cell)
+				cell.sides[i] = side
+				cell_np.sides[indx(i + 3)] = side
+				get_child(2).add_child(side)
+				side.owner = self
+				
+	for child in get_child(0).get_children():
+		for side in child.sides:
+			assert(side != null)
