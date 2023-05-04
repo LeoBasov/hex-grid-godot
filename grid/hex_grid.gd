@@ -74,6 +74,7 @@ func create_vertices() -> void:
 					if (cell_n == null) and (cell_np == null) and (cell.vertices[i] == null):
 						var vertex = HexVertex.new(cell.pointy_hex_corner(size, i))
 						cell.vertices[i] = vertex
+						vertex.cells.append(cell)
 						get_child(1).add_child(vertex)
 						vertex.owner = self
 					elif (cell_np == null):
@@ -81,6 +82,8 @@ func create_vertices() -> void:
 							var vertex = HexVertex.new(cell.pointy_hex_corner(size, i))
 							cell.vertices[i] = vertex
 							cell_n.vertices[indx(i + 2)] = vertex
+							vertex.cells.append(cell)
+							vertex.cells.append(cell_n)
 							get_child(1).add_child(vertex)
 							vertex.owner = self
 						else:
@@ -92,18 +95,25 @@ func create_vertices() -> void:
 							var vertex = HexVertex.new(cell.pointy_hex_corner(size, i))
 							cell.vertices[i] = vertex
 							cell_np.vertices[indx(i + 4)] = vertex
+							vertex.cells.append(cell)
+							vertex.cells.append(cell_np)
 							get_child(1).add_child(vertex)
 							vertex.owner = self
 						else:
 							var vertex = cell.vertices[i] if cell.vertices[i] else cell_np.vertices[indx(i + 4)]
 							cell.vertices[i] = vertex
 							cell_np.vertices[indx(i + 4)] = vertex
+							vertex.add_cell(cell)
+							vertex.add_cell(cell_np)
 					else:
 						if (cell.vertices[i] == null) and (cell_n.vertices[indx(i + 2)] == null) and (cell_np.vertices[indx(i + 4)] == null):
 							var vertex = HexVertex.new(cell.pointy_hex_corner(size, i))
 							cell.vertices[i] = vertex
 							cell_n.vertices[indx(i + 2)] = vertex
 							cell_np.vertices[indx(i + 4)] = vertex
+							vertex.add_cell(cell)
+							vertex.add_cell(cell_np)
+							vertex.add_cell(cell_n)
 							get_child(1).add_child(vertex)
 							vertex.owner = self
 							
