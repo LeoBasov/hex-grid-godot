@@ -2,11 +2,14 @@ class_name HexGrid extends Node2D
 
 @export var size: float = 100.0
 var cell_map: Array[Array]
-var n_circle
+var n_circle: int
 
 func _draw():
 	for child in get_children():
 		draw_circle(child.position, 10.0, Color.GREEN)
+		
+		for i in range(1, 6):
+			draw_line(child.pointy_hex_corner(size, i - 1), child.pointy_hex_corner(size, i), Color.RED)
 
 func build(n_circle_: int) -> void:
 	var cell
