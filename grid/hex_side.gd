@@ -11,4 +11,4 @@ func _init(i, cell1, cell2 = null):
 	vertices[1] = cell1.vertices[(i + 1)%6]
 	
 	position = 0.5*(vertices[0].position + vertices[1].position)
-	rotate((vertices[0].position + vertices[1].position).angle())
+	rotate((vertices[1].position - vertices[0].position).angle() - PI/2.0)
