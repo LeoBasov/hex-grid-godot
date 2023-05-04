@@ -22,6 +22,7 @@ func build(n_circle_: int) -> void:
 	
 	create_cells()
 	create_vertices()
+	
 
 func create_cells() -> void:
 	add_child(Node2D.new())
